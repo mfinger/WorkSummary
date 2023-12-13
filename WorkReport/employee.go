@@ -11,6 +11,7 @@ type Employee struct {
 	Invalid map[int64]interface{}
 }
 
+// DoShiftsConflict - Determine if two shifts conflict with each other
 func DoShiftsConflict(shift1 Shift, shift2 Shift) bool {
 	result := true
 	if shift1.StartTime.Compare(shift2.EndTime) >= 0 || shift1.EndTime.Compare(shift2.StartTime) <= 0 {
@@ -19,6 +20,7 @@ func DoShiftsConflict(shift1 Shift, shift2 Shift) bool {
 	return result
 }
 
+// NewEmployee Create a new Employee object
 func NewEmployee(id int64) *Employee {
 	employee := new(Employee)
 
@@ -29,6 +31,7 @@ func NewEmployee(id int64) *Employee {
 	return employee
 }
 
+// AddShift Add a shift to an employees record, checking for conflicts
 func (e *Employee) AddShift(newShift Shift) {
 	for _, shift := range e.Shifts {
 		if DoShiftsConflict(newShift, shift) {
@@ -39,6 +42,7 @@ func (e *Employee) AddShift(newShift Shift) {
 	e.Shifts = append(e.Shifts, newShift)
 }
 
+// GenerateReports Generate the list of weekly reports for this employee
 func (e Employee) GenerateReports() []WeeklyReport {
 	location, _ := time.LoadLocation("CST6CDT")
 	reports := make(map[string]*WeeklyReport)

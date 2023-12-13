@@ -11,6 +11,7 @@ type WorkReport struct {
 	shifts    []Shift
 }
 
+// NewWorkReport Create a new worker report objecy
 func NewWorkReport() *WorkReport {
 	workSummary := new(WorkReport)
 
@@ -19,6 +20,7 @@ func NewWorkReport() *WorkReport {
 	return workSummary
 }
 
+// Process the loaded shifts into the employees records
 func (ws WorkReport) processShifts() {
 	for _, shift := range ws.shifts {
 		var emp *Employee
@@ -31,7 +33,7 @@ func (ws WorkReport) processShifts() {
 	}
 }
 
-// Load the list of lottery entries from a file
+// Load the list of shift entries from a file
 func (ws *WorkReport) Load(filename string) error {
 
 	if f, err := os.Open(filename); err != nil {
@@ -61,6 +63,7 @@ func (ws *WorkReport) load(reader io.Reader) error {
 	return nil
 }
 
+// GenerateReports Generate and save the weekly reports
 func (ws WorkReport) GenerateReports(filename string) error {
 	reports := []WeeklyReport{}
 	for _, emp := range ws.employees {
@@ -70,6 +73,7 @@ func (ws WorkReport) GenerateReports(filename string) error {
 	return ws.SaveReports(filename, reports)
 }
 
+// SaveReports Save the generate reports
 func (ws WorkReport) SaveReports(filename string, reports []WeeklyReport) error {
 	f, err := os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
 	defer f.Close()
